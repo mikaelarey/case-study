@@ -1,0 +1,39 @@
+version: '3.4'
+
+networks:
+  backend:
+  frontend:
+
+services:
+  assetsdb:
+    container_name: mssql_assets_db
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=sa@admin123
+    networks:
+      - backend
+    ports: 
+      - 8001:1433
+
+  assetmanagement:
+    container_name: webapi_assets
+    image: rey025/assetmanagement 
+    networks: 
+      - backend
+      - frontend
+    ports:
+      - 8002:80 
+    environment:
+      - SQLSERVER_HOST=assetsdb
+      - SQLSERVER_DB_NAME=assets
+      - SQLSERVER_PASSWORD=sa@admin123
+
+  web-portal:
+    container_name: angular_app_assets
+    image: rey025/angular-app
+    networks: 
+      - frontend
+    ports:
+      - 8003:80 
+  

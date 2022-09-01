@@ -1,0 +1,105 @@
+<div class="container my-5">
+    <div class="row my-3">
+        <div class="col-6">
+            <h2>Invoice</h2>
+        </div>
+        <div class="col-6 d-flex justify-content-end align-items-center">
+            <form [formGroup]="searchForm" (submit)="submitForm()">
+                <div class="d-inline-block text-center mx-1" style="width:7rem">
+                    <select class="form-control form-control-sm" formControlName="month" [ngClass]="(isvalidMonth) ? '' : 'is-invalid'">
+                        <option value="">-- Month --</option>
+                        <option value="1">January</option>
+                        <option value="2">February</option>
+                        <option value="3">March</option>
+                        <option value="4">April</option>
+                        <option value="5">May</option>
+                        <option value="6">June</option>
+                        <option value="7">July</option>
+                        <option value="8">August</option>
+                        <option value="9">September</option>
+                        <option value="10">October</option>
+                        <option value="11">November</option>
+                        <option value="12">December</option>
+                    </select>
+                </div>
+                <div class="d-inline-block text-center mx-1" style="width:7rem">
+                    <input type="number" class="form-control form-control-sm" formControlName="year" [ngClass]="(isvalidYear) ? '' : 'is-invalid'"/>
+                </div>
+                <div class="d-inline-block">
+                    <button type="submit" class="btn btn-sm btn-primary">Generate</button>
+                </div>
+                
+            </form>
+
+            
+        </div>
+    </div>
+
+    <table class="table table-striped table-hover border text-center">
+        <thead class="text-dark">
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Date</th>
+                <th scope="col">Year</th>
+                <th scope="col">Month</th>
+                <th scope="col">Total</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let invoice of invoices">
+                <th scope="row">{{ invoice.id }}</th>
+                <td>{{ invoice.issuedDateAsString }}</td>
+                <td>{{ invoice.cycleYear }}</td>
+                <td>{{ invoice.cycleMonth }}</td>
+                <td>{{ invoice.totalAmount }}$</td>
+                <td>
+                    <button class="btn btn-success btn-sm mx-1" (click)="loadInvoiceByDate(template, invoice)">
+                        <i class="fa fa-eye"></i>
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div *ngIf="invoices.length == 0">
+        <h4 class="text-center my-5">No available records</h4>
+    </div>
+</div>
+
+
+<ng-template #template>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Invoice Details</h4>
+        <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="modalRef?.hide()">
+            <span aria-hidden="true" class="visually-hidden">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <p><strong>ID:</strong> {{ activeInvoice?.id }}</p>
+        <p><strong>Date:</strong> {{ activeInvoice?.issuedDateAsString }}</p>
+        <p><strong>Total:</strong> {{ activeInvoice?.totalAmount }}$</p>
+
+        <table class="table table-striped table-hover border text-center">
+            <thead class="text-dark">
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Valid From</th>
+                    <th scope="col">Valid To</th>
+                    <th scope="col">Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let asset of assets">
+                    <th scope="row">{{ asset.assetId }}</th>
+                    <td>{{ asset.name }}</td>
+                    <td>{{ asset.validFrom }}</td>
+                    <td>{{ asset.validTo }}</td>
+                    <td>{{ asset.price }}$</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</ng-template>
+
